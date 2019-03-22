@@ -1,0 +1,123 @@
+Profesional --> Alejandro : alex.sev@gmail.com
+
+Hybernate es un framework utilizado para gestionar las clases persistiendolas(usando anotaciones) usando JPQL,
+permitiendo realizar consultas en la base de datos usando los propios objetos(clases) para realizar consultas.
+
+La forma de tratar las clases es usando anotaciones, algunas de las cuales son:
+
+@Entity: Indica que la clase en la que está es una tabla de la base de datos.
+   - lugar: Se posiciona antes de definir la clase ||
+ 						   \/
+
+						@Entity
+						public class Example {....
+
+@Table: Indica a que tabla se enlaza y en que esquema se encuentra la misma.
+   - lugar: va justo despues del @Entity 	  ||
+						  \/
+						@Entity
+						@Table(name="TABLE_NAME",schema="SCHEMA_EXAMPLE")
+						public class Example {....
+
+
+@Id: Como su nombre indica, se utiliza para indicar que atributo de la clase es el Id en la tabla de la base de datos.
+   - lugar: [antes de la definicion del atributo | antes de la cabecera del get del atributo]  ||
+											       \/
+
+
+											public class Example {
+												@Id[posible sitio]
+												private int id;
+												....
+												
+												@Id[posible sitio]
+												public int getId(){...
+
+@Column:Se función es vincular cada atributo al campo de la tabla
+	* --> obligatorio | ? --> optativo
+   - lugar: Su lugar es antes de la definición del atributo de la clase    ||
+									   \/
+									public class Example {
+										@Id[posible sitio]
+										@Column(name=""[*],unique=true/false[?])
+										private int id;
+										....
+
+										@Id[posible sitio]
+										public int getId(){...		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

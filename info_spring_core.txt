@@ -1,0 +1,90 @@
+Instructor --> Paco
+
+
+			------------------------------------
+			|||       INFO PREVIA		 |||				
+			------------------------------------
+Clase Bean --> clase simple con atributos, get, set y constructor vacio.
+
+--------------------------------------
+
+
+
+Spring es un framework que nos ayuda a desarrollar software. Al ser 
+codigo libre, nos permite modificar el codigo a las necesidades que requiera el
+programador.
+
+
+Conceptos:
+
+- IoC[inversion de control] --> String cambia la forma de instanciar una clase
+				  dentro de otra en el constructor mediante una anotacion.
+				  
+				  Example: -->  @Controller [lugar:siempre sobre el "public class"]
+					 	public class Example{
+						   @Autowired [lugar: *explicado abajo*]
+						   private Casa casa;
+						   ....
+						}
+						 
+
+
+							
+	
+
+- Spring Container (IoC Container) --> Es el nucleo de Spring Framework, el cual crea objetos, los configura
+					y los injecta.
+					El comportamiento por defecto es SingleTone.
+
+- Inyección de dependencia --> Técnica que se aplica para que un objeto no tenga que obtener sus dependencias,
+				es decir, las referencias a los objetos que colaboran con él, de forma que el 
+				contenedor las inyecta al crearlo.
+
+
+
+
+****************
+Tipos de anotaciones a nivel de Clases (Anotaciones , como hibernate):
+
+- @Component --> Componente genérico de Spring
+
+- @Controller -->Componente para la capa de presentación (Usado para los controladores de las ventanas graficas)
+
+- @Service --> Componente específico para la capa de servicio (Usado para los implement de la interfaz)
+
+- @Repository --> Componente específico para la capa de persistencia.
+
+Lugar de la anotaciones superiores --> @[Component|Controller|Service]
+				       public class Example {...}
+					
+Tipos de anotaciones a nivel de atributos:
+
+- @Autowired [lugar: sobre el atributo, sobre la cabecera del constructroor o el set] --> 
+									enlaza automágicamente el campo con la 
+									clase Bean del tipo correspondiente.
+
+							
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					   

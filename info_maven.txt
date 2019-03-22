@@ -1,0 +1,76 @@
+
+JUAN DIEGO, EXPERTO QUE NOS HA DADO LA CLASE.
+juan.diego.del.moral.gomez@gmail.com
+
+GENERAR PROYECTO MAVEN
+	mvn archetype:generate -DgroupId=com.everis -DartifactId=test-maven -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+info del comando:
+ - -DgroupId			--> Grupo de nuestro proyecto. Ej: com.everis
+ - -DatifactId			--> Id de nuestro proyecto. Ej: test-maven
+ - -DarchetypeArtifactId	--> Nombre del arquetipo a usar
+
+------------------------------------------------------------------------------
+mvn dependency:??
+
+?? = {
+	tree	--> lista todas las dependencias de forma jerarquica
+	resolve --> muestra las dependencias por orden alfabético
+}
+
+------------------------------------------------------------------------------
+El proyecto Maven puede tener dependencia jerárquica de otros proyectos maven, la forma de enlazarlos es:
+
+En el padre:
+
+	<modules>
+		<module>app</module>	
+	</modules>
+
+
+En el hijo:
+
+	<parent>
+		<groupId>org.codehaus.mojo</groudId>
+		<artifactId>my-parent</artifactId>
+		<version>2.0</version>
+		<relativePath>../my-parent</relativePath>
+	</parent>
+
+
+MODIFICADORES DEL COMANDO MVN
+ -Dmaven.test.skip=[true|false] --> se utiliza para omitir las pruebas unitarias.
+
+ -Dmaven.compile.skip=[true|false] --> se utiliza para omitir la compilacion
+
+ -DskipTests --> omite todos los tests y compilaciones.
+
+-------------------------------------------------------------------------------------------
+COMANDOS RELACIONADOS
+java -cp target\maven-test-1.0-SNAPSHOT.jar com.everis.bootcamp.App --> Ejecuta el .jar del proyecto maven
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

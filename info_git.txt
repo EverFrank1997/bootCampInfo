@@ -1,0 +1,22 @@
+PARA IMPORTAR UN REPOSITORIO GIT A NUESTRO EQUIPO:
+git clone {{ruta_del_repositorio}}
+
+PARA SUBIR AL REPOSITORIO EN EL SERVIDOR:
+
+ * antes de poder subir los cambios al servidor de GIT tenemos que decirle a GIT de nuestro equipo que ha habido cambios *
+ - git status --> comprueba los ficheros que se han modificado.
+ - git add [.(todos los archivos) | {{nombre del fichero+extension}}] --> selecciona que archivos van a ser subidos al servidor
+ - git commit -m ""(el modificador -m se utiliza para darle un comentario a los ficheros a la hora de subirlos al servidor)--> establece un comentario clave a los ficheros que se modifiquen/creen en el servidor GIT
+ - git push --> sube al servidor de respositorios GIT los ficheros.
+
+--------------------------------------------------------------------
+COMANDOS GIT:
+
+ - git pull 						--> se utiliza para sincronizar el repositorio del servidor a nuestro equipo
+ - git branch [nombre] 					--> se usa para crear una nueva rama en el repositorio
+ - git checkout [master | {nombre_rama}]		--> se utiliza para cambiar el puntero a una rama
+ - git tag [version] [refenrencia del commit en el log] --> se utiliza para establecer una versión a un commit
+ - git merge [nombre_rama] 				--> se utiliza para sincronizar los datos de una rama con el master
+ - git rm {{nombre_archivo}}				--> elimina un archivo del repositorio, para que sea válido se ha de hacer todo el proceso explicado arriba.
+	|
+	-----> -f --> se utiliza para obligar la eliminación del archivo/s

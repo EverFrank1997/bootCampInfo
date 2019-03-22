@@ -1,0 +1,405 @@
+package org.springframework.samples.petclinic;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Scanner;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.samples.petclinic.owner.Owner;
+
+public class JDBCApplication {
+
+	public static void main(String[] args) {
+		System.out.println("-------- Test de conexión con MySQL ------------");
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("No encuentro el driver en el Classpath");
+			e.printStackTrace();
+			return;
+		}
+
+		System.out.println("Driver instalado y funcionando");
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/petclinic","root", "root");
+			if (connection == null) {
+				System.err.println("Error en la conexion");
+				return;
+			}
+
+			System.out.println("Conexión establecida");
+			
+//		    ejercicio1(connection,statement);
+//		    ejercicio2(connection,statement);
+//		    ejercicio3(connection,statement);
+//		    ejercicio4(connection,statement);
+//		    ejercicio5(connection,statement);
+		    ejercicio6(connection,statement);
+			
+			
+		} catch (SQLException e) {
+			System.out.println("Connection Failed! Check output console");
+			e.printStackTrace();
+			return;
+		} finally {
+//			try {
+//				if(statement != null) {
+//					connection.close();
+//					connection = null;
+//				}
+//					
+//				if(connection != null)
+//		            connection.close();
+//			} catch (SQLException se) {
+//	         	se.printStackTrace();
+//
+//		    }
+
+		}
+	}
+
+	
+public static void ejercicio1(Connection connection, Statement statement) {
+		
+		try {
+			statement = connection.createStatement();
+			
+			ResultSet rs = statement.executeQuery("SELECT * from owners");
+
+			System.out.printf(" |%-5s|%-10s|%-25s|%-25s|%-25s|%-25s|\n","id","first_name","last_name","address","city","telephone");
+			while(rs.next()) {
+				System.out.printf(" |%-5d|%-10s|%-25s|%-25s|%-25s|%-25s|\n",rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
+				
+			}
+			StringUtils.center("", "Column Heading".length());
+			rs.close();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+public static void ejercicio2(Connection connection, Statement statement) {
+	
+	try {
+		statement = connection.createStatement();
+		
+		Scanner sc = new Scanner(System.in);
+		
+		String[] columns = {"nombre","apellido","direccion","ciudad","telefono"};
+		String[] campos = new String[5];
+		
+		for(int i=0;i<columns.length;i++) {
+			System.out.print("Introduzca "+columns[i]+": ");
+			do {
+				campos[i] = sc.nextLine();
+			}while(campos[i]==null || campos[i].trim().isEmpty());
+		}
+		
+		sc.close();
+		
+		int rs = statement.executeUpdate("INSERT INTO owners(first_name,last_name,address,city,telephone) VALUES(\'"+campos[0]+"\',\'"+campos[1]+"\',\'"+campos[2]+"\',\'"+campos[3]+"\',\'"+campos[4]+"\')");
+
+		if(rs==0)
+			System.err.println("No se ha podido modificar");
+		else
+			System.out.println("Row affected");
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+}
+
+public static void ejercicio3(Connection connection, Statement statement) {
+	
+	try {
+		statement = connection.createStatement();
+				
+		String[] columns = {"nombre","apellido","direccion","ciudad","telefono"};
+		
+		int rs = statement.executeUpdate("UPDATE owners SET city='Sevilla' WHERE city='Roma'");
+
+		if(rs==0)
+			System.err.println("No se ha podido modificar");
+		else
+			System.out.println("Row affected");
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+}
+
+public static void ejercicio4(Connection connection, PreparedStatement statement) {
+	
+	try {
+		String parametro = "s";
+		String busqueda = "SELECT * from owners WHERE first_name LIKE ? OR last_name LIKE ?";
+		
+		statement = connection.prepareStatement(busqueda);
+		
+		statement.setString(1, "%"+parametro+"%");
+		statement.setString(2, "%"+parametro+"%");
+		
+		ResultSet rs = statement.executeQuery();
+
+		System.out.printf(" |%-5s|%-10s|%-25s|%-25s|%-25s|%-25s|\n","id","first_name","last_name","address","city","telephone");
+		while(rs.next()) {
+			System.out.printf(" |%-5d|%-10s|%-25s|%-25s|%-25s|%-25s|\n",rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
+			
+		}
+		StringUtils.center("", "Column Heading".length());
+		rs.close();
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+}
+		
+public static void ejercicio5(Connection connection, PreparedStatement statement) {
+	
+	try {
+		statement = connection.prepareStatement("INSERT INTO owners(first_name,last_name,address,city,telephone) VALUES(?,?,?,?,?)");
+		
+		Scanner sc = new Scanner(System.in);
+		
+		String[] columns = {"nombre","apellido","direccion","ciudad","telefono"};
+		String[] campos = new String[5];
+		
+		for(int i=0;i<columns.length;i++) {
+			System.out.print("Introduzca "+columns[i]+": ");
+			do {
+				campos[i] = sc.nextLine();
+			}while(campos[i]==null || campos[i].trim().isEmpty());
+		}
+				
+		statement.setString(1, campos[0]);
+		statement.setString(2, campos[1]);
+		statement.setString(3, campos[2]);
+		statement.setString(4, campos[3]);
+		statement.setString(5, campos[4]);
+		
+		sc.close();
+		
+		int rs = statement.executeUpdate();
+
+		if(rs==0)
+			System.err.println("No se ha podido modificar");
+		else
+			System.out.println("Row affected");
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+}
+
+public static void ejercicio6(Connection connection, PreparedStatement statement) {
+	Scanner sc=null;
+	try {
+		statement = connection.prepareStatement("INSERT INTO owners(first_name,last_name,address,city,telephone) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		sc = new Scanner(System.in);
+		Integer id = null;
+		String[] columns = {"nombre","apellido","direccion","ciudad","telefono"};
+		String[] campos = new String[5];
+		System.out.println("\n\n\n");
+		
+		System.out.println( "\t-------------------------\n"+
+							"\t-- INSERCIÓN DE DUEÑO: --\n"+
+							"\t-------------------------");
+		
+		for(int i=0;i<columns.length;i++) {
+			System.out.print("Introduzca "+columns[i]+": ");
+			do {
+				campos[i] = sc.nextLine();
+			}while(campos[i]==null || campos[i].trim().isEmpty());
+		}
+				
+		statement.setString(1, campos[0]);
+		statement.setString(2, campos[1]);
+		statement.setString(3, campos[2]);
+		statement.setString(4, campos[3]);
+		statement.setString(5, campos[4]);
+				
+		statement.executeUpdate();
+		ResultSet rs = statement.getGeneratedKeys();
+			// malvina.deljunco@iesvelazquez.org
+		if(rs!=null) {
+			if(rs.next()) {
+				id = rs.getInt(1);
+				System.out.println("Owner insertado");
+			}
+			
+			System.out.println( "\n\n\n"+
+								"\t--------------------------\n"+
+								"\t-- DATOS DE LA MASCOTA: --\n"+
+								"\t--------------------------");
+			
+			Integer tipoPet=null;
+			do {
+				System.out.println("-----------------------------\n"+
+								   "| 1 |		CAT			|\n"+
+								   "| 2 |		DOG			|\n"+
+								   "| 3 |		LIZARD			|\n"+
+								   "| 4 |		SNAKE			|\n"+
+								   "| 5 |		BIRD			|\n"+
+								   "| 6 |		HAMSTER			|\n"+
+								   "-----------------------------");
+				System.out.print("\nSELECCIONE TIPO DE MASCOTA: \n");
+
+				tipoPet=sc.nextInt();
+				
+			}while(tipoPet==null || tipoPet<1 || tipoPet>6);
+			
+			
+			String nombrePet = null;			
+			do {
+				
+				System.out.println("Introduzca el nombre de la mascota:");
+				nombrePet = sc.nextLine();
+				
+			}while(nombrePet==null || nombrePet.trim().isEmpty());
+			
+			Date date=null;
+			do {
+				try {
+					System.out.println("Introduzca una fecha de nacimiento valida(Ej: 1995-03-21):");
+					date = Date.valueOf(sc.nextLine());
+				}catch (Exception e) {
+					date = null;
+				}
+			}while(date == null);
+			statement = connection.prepareStatement("INSERT INTO pets(name,birth_date,type_id,owner_id) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			
+			statement.setString(1, nombrePet);
+			statement.setDate(2, date);
+			statement.setInt(3, tipoPet);
+			statement.setInt(4, id);
+						
+			if(statement.executeUpdate()==1) {
+				System.out.println("Mascota insertada");
+								
+				Integer idPet=null;
+				rs = statement.getGeneratedKeys();
+				// malvina.deljunco@iesvelazquez.org
+				if(rs!=null) {
+					if(rs.next()) {
+						idPet = rs.getInt(1);
+						
+						ResultSet rs2 = null;
+						try {
+							System.out.println("\nDUEÑO:");
+							statement = connection.prepareStatement("SELECT * from owners WHERE id=?");
+							statement.setInt(1, id);
+							rs2 = statement.executeQuery();
+							
+							if(rs2.next()) {
+								System.out.printf(" |%-5s|%-10s|%-15s|%-20s|%-15s|%-15s|\n","id","first_name","last_name","address","city","telephone");
+								System.out.println(" |-------------------------------------------------|");
+								System.out.printf(" |%-5d|%-10s|%-15s|%-20s|%-15s|%-15s|\n",rs2.getInt(1),rs2.getString(2),rs2.getString(3),rs2.getString(4),rs2.getString(5),rs2.getString(6));
+								
+								while(rs2.next()) {
+									System.out.printf(" |%-5d|%-10s|%-25s|%-25s|%-25s|%-25s|\n",rs2.getInt(1),rs2.getString(2),rs2.getString(3),rs2.getString(4),rs2.getString(5),rs2.getString(6));
+									
+								}
+							}
+							
+							rs2.close();
+							
+							
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+						try {
+							statement = connection.prepareStatement("SELECT * from pets WHERE id=?");
+							statement.setInt(1, idPet);
+							rs2 = statement.executeQuery();
+							System.out.println("\n\nMASCOTA:");
+							
+							if(rs2.next()) {
+								System.out.printf(" |%-5s|%-10s|%-10s|%-10s|%-10s|\n","id","name","birth_date","type_id","owner");
+								System.out.println(" |-----------------------------------------------------------------|");
+								System.out.printf(" |%-5d|%-10s|%-10s|%-10d|%-10d|\n",rs2.getInt(1),rs2.getString(2),(rs2.getDate(3).toString()),rs2.getInt(4),rs2.getInt(5));
+								while(rs2.next()) {
+									System.out.printf(" |%-5d|%-10s|%-10s|%-10d|%-10d|\n",rs2.getInt(1),rs2.getString(2),(rs2.getDate(3).toString()),rs2.getInt(4),rs2.getInt(5));									
+								}
+							}
+							rs2.close();
+							
+							
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+						
+						
+						
+						
+						statement = connection.prepareStatement("DELETE FROM pets WHERE id=?");
+						statement.setInt(1, idPet);
+						System.out.println("Mascota eliminada");
+						
+						statement = connection.prepareStatement("DELETE FROM owners WHERE id=?");
+						statement.setInt(1, id);
+						System.out.println("Owner eliminado");
+					}
+				}
+				statement = connection.prepareStatement("DELETE FROM owners WHERE id=?");
+				statement.setInt(1, id);
+				
+			}
+			else
+				System.err.println("Error al insertar la mascota");
+			
+		}else {
+			System.err.println("Error al insertar el dueño");
+		}
+		
+		rs.close();
+	
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	finally {
+		sc.close();
+		
+	}
+	
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
